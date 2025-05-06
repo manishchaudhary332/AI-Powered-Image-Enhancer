@@ -1,39 +1,36 @@
 import React, { useState } from 'react'
 import ImageUpload from './ImageUpload'
 import ImagePreview from './ImagePreview'
-import { enhancedImageApi } from '../Utils/enhanceImageApi'
+import { enhancedImageAPI } from '../Utils/enhanceImageApi'
 
 const Home = () => {
-    const [uploadImage, setuploadImage] = useState(null)
-    const [enhanedImage, setenhanedImage] = useState(null)
-    const [loading, setloading] = useState(false)
+    const [uploadImage, setUploadImage] = useState(null);
+    const [enhancedImage, setEnhancedImage] = useState(null);
+    const [loading, setloading] = useState(false);
 
-    const uploadImageHandler = async(file)=>{
-        setuploadImage(URL.createObjectURL(file))
-        setloading(true)
-        console.log(URL.createObjectURL(file))
-        // calling api to enchance the image
-        try{
-            const enhancedURL = await enhancedImageApi(file)
-            setenhanedImage(enhancedURL)
-            setloading(false)
-
-        }catch(err){
-            console.log(err);
-            alert("error while enhancing tha Image . Please ty Again Latter")
-            
-
+    const UploadImageHandler = async (file) => {
+        setUploadImage(URL.createObjectURL(file));
+        setloading(true);
+        try {
+            const enhancedURL = await enhancedImageAPI(file);
+            setEnhancedImage(enhancedURL);
+            setloading(false);
+        } catch (error) {
+            console.log(error);
+            alert("Error while enhancing the image. Please try again later.");
         }
-    }
-  return (
-    <>
-        <ImageUpload  uploadImageHandler={uploadImageHandler}/>
-        <ImagePreview 
-        loading={loading} 
-        uploaded={uploadImage} 
-        enhaned={enhanedImage}/>
-    </>
-  )
-}
+    };
 
-export default Home
+    return (
+        <>
+            <ImageUpload UploadImageHandler={UploadImageHandler} />
+            <ImagePreview
+                loading={loading}
+                uploaded={uploadImage}
+                enhanced={enhancedImage?.image}
+            />
+        </>
+    );
+};
+
+export default Home;
